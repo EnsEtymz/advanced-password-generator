@@ -1,9 +1,10 @@
 "use client";
 import { Fragment, useEffect, useRef, useState } from "react";
-import PasswordResultModal from "./components/passwordResultModal";
+import PasswordResultModal from "../components/PasswordResultModal";
 import "./globals.css";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import Navbar from "@/components/Navbar";
 
 const defaultRangeValue = 12;
 const defaultToken = "";
@@ -31,9 +32,12 @@ export default function Home() {
     defaultExcludeSettings
   );
   const [generatedPassword, setGeneratedPassword] = useState("");
-  const baseUrl = "https://unified-api.beratcarsi.com/password-generator";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL ??
+    "https://unified-api.beratcarsi.com/password-generator";
   const [isOpen, setIsOpen] = useState(false);
   const [passwordName, setPasswordName] = useState("");
+  console.log("env", process.env.NEXT_PUBLIC_API_URL);
 
   // İlk açılışta include değerlerini yükle
   useEffect(() => {
@@ -171,7 +175,7 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/generate`, {
+      const response = await fetch(`${baseUrl}/password-generator/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -219,7 +223,7 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch(`${baseUrl}/save`, {
+      const response = await fetch(`${baseUrl}/password-generator/save`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
@@ -244,6 +248,8 @@ export default function Home() {
 
   return (
     <Fragment>
+      <Navbar />
+
       <div className="flex flex-col items-center md:justify-center lg:pt-12">
         <div className="bg-white p-8 rounded-lg md:shadow-lg w-full md:h-auto lg:w-1/2">
           <div className="w-full gap-4 border-b pb-4">
@@ -288,16 +294,13 @@ export default function Home() {
                   className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
                   onClick={handleClose}
                 >
-                  {/* Backdrop */}
                   <div
                     id="overlay"
                     className="fixed inset-0 bg-gray-500 bg-opacity-50 z-40"
                   ></div>
 
                   <div className="relative p-4 w-full max-w-md max-h-full z-50">
-                    {/* Modal content */}
                     <div className="relative bg-white rounded-lg shadow-sm">
-                      {/* Modal header */}
                       <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
                         <h3 className="text-xl font-semibold">Settings</h3>
                         <button
@@ -323,7 +326,6 @@ export default function Home() {
                           <span className="sr-only">Close modal</span>
                         </button>
                       </div>
-                      {/* Modal body */}
 
                       <div className="p-4 md:p-5">
                         <div className="flex flex-col justify-start gap-3">
@@ -426,7 +428,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {/* Seçenekler */}
             <div className="flex flex-col md:flex-row gap-3 md:gap-24">
               <div className="grid grid-cols-1 gap-3">
                 {Object.keys(includeSettings).map((key) => (
@@ -473,7 +474,7 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div>
+      </div> 
       <PasswordResultModal
         visibleModal={visibleModal}
         setVisibleModal={setVisibleModal}

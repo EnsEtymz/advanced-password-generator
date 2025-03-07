@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { toast } from "sonner";
 
 const PasswordResultModal = ({
@@ -8,23 +9,19 @@ const PasswordResultModal = ({
   setPasswordName,
   savePassword,
 }) => {
+  const [isCopied, setIsCopied] = useState(false);
   const copyButton = () => {
-    const copyButton = document.getElementById("copy-button");
-    const copiedButton = document.getElementById("copied-button");
+    if (!generatedPassword) return; // Eğer şifre boşsa, kopyalama işlemi yapma
 
-    // Metni kopyala
     navigator.clipboard
       .writeText(generatedPassword)
       .then(() => {
-        // Kopyalandıktan sonra butonları değiştirme
         toast.success("Password copied to clipboard.");
-        copyButton.classList.add("hidden");
-        copiedButton.classList.remove("hidden");
+        setIsCopied(true);
 
         // 2 saniye sonra butonları eski haline döndür
         setTimeout(() => {
-          copyButton.classList.remove("hidden");
-          copiedButton.classList.add("hidden");
+          setIsCopied(false);
         }, 2000);
       })
       .catch((error) => {
@@ -82,10 +79,10 @@ const PasswordResultModal = ({
             {/* Kopyalama butonu */}
             <button
               id="copy-button"
-              className="ml-4 hover:text-[#34c75a] transition duration-200"
-              onClick={() => {
-                copyButton();
-              }}
+              className={`ml-4 hover:text-[#34c75a] transition duration-200 ${
+                isCopied ? "hidden" : ""
+              }`}
+              onClick={copyButton}
             >
               <svg
                 viewBox="0 0 24 24"
@@ -103,7 +100,12 @@ const PasswordResultModal = ({
               </svg>
             </button>
             {/* Kopyalandı butonu */}
-            <button id="copied-button" className="ml-4 text-[#34c75a] hidden">
+            <button
+              id="copied-button"
+              className={`ml-4 hover:text-[#34c75a] transition duration-200 ${
+                isCopied ? "" : "hidden"
+              }`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
