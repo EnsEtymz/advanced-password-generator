@@ -53,7 +53,7 @@ export default function Home() {
   const [generatedPassword, setGeneratedPassword] = useState("");
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ??
-    "https://unified-api.beratcarsi.com/password-generator";
+    "https://devtools-api.beratcarsi.com";
   const [isOpen, setIsOpen] = useState(false);
   const [passwordName, setPasswordName] = useState("");
 
