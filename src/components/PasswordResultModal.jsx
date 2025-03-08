@@ -16,7 +16,12 @@ const PasswordResultModal = ({
     navigator.clipboard
       .writeText(generatedPassword)
       .then(() => {
-        toast.success("Password copied to clipboard.");
+        toast.success("Password copied to clipboard.", {
+          style: {
+            background: '#34c75a',
+            color: '#fff',
+          },
+        });
         setIsCopied(true);
 
         // 2 saniye sonra butonları eski haline döndür
@@ -25,7 +30,12 @@ const PasswordResultModal = ({
         }, 2000);
       })
       .catch((error) => {
-        toast.error("An error occurred while copying the password.");
+        toast.error("An error occurred while copying the password.", {
+          style: {
+            background: '#000',
+            color: '#fff',
+          },
+        });
       });
   };
 
