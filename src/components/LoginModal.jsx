@@ -21,7 +21,7 @@ import { login } from "../../redux/authSlice";
 import Loader from "@/components/Loader";
 import { toast } from "sonner";
 
-export function LoginModal({ loginOpen, user }) {
+export function LoginModal({ loginOpen, setLoginOpen, user }) {
   const [isOpen, setIsOpen] = useState(loginOpen);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export function LoginModal({ loginOpen, user }) {
   }, [user]);
   useEffect(() => {
     setIsOpen(loginOpen);
-  }, [loginOpen]);
+  }, [loginOpen]); 
 
   const formik = useFormik({
     initialValues: {
@@ -69,7 +69,7 @@ export function LoginModal({ loginOpen, user }) {
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={() => {setIsOpen(false); setLoginOpen(false)}}>
       <DialogTrigger asChild>
         <Button className="bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-sm">
           Login

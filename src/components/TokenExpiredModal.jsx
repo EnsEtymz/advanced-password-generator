@@ -24,7 +24,7 @@ export function TokenExpiredModal({setLoginOpen}) {
 </DialogHeader>
 
         <DialogFooter>
-          <Button type="button" onClick={()=>{setState(false); setLoginOpen(true); }}>Login</Button>
+          <Button type="button" onClick={()=>{setState(false); setLoginOpen(true); console.log("enes") }}>Login</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

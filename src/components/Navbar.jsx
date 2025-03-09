@@ -21,15 +21,13 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
   const loading = useSelector((state) => state.auth.loading);
   const [loginOpen, setLoginOpen] = useState(false);
+ 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
   const handleLogout = () => {
     dispatch(logout());
   };
-  useEffect(() => {
-    console.log("loginOpen", loginOpen);
-  }, [loginOpen]);
   return (
     <Fragment>
       <div className="py-3 px-6 border-t-4 border-[#34c75a] flex items-center justify-between gap-6 bg-white">
