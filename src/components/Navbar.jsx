@@ -15,19 +15,29 @@ import { LoginModal } from "./LoginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, logout } from "../../redux/authSlice";
 import { TokenExpiredModal } from "./TokenExpiredModal";
+import { useLoginModalStore } from "@/app/authStore";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const loading = useSelector((state) => state.auth.loading);
-  const [loginOpen, setLoginOpen] = useState(false);
- 
+  const loginModalState = useLoginModalStore((state) => state.loginModalState);
+  const [loginOpen, setLoginOpen] = useState(loginModalState);
+  const setLoginModalState = useLoginModalStore(
+    (state) => state.setLoginModalState
+  );
+
+  useEffect(() => {
+    setLoginOpen(loginModalState);
+  }, [loginModalState]);
+
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
   const handleLogout = () => {
     dispatch(logout());
   };
+
   return (
     <Fragment>
       <div className="py-3 px-6 border-t-4 border-[#34c75a] flex items-center justify-between gap-6 bg-white">
@@ -42,11 +52,14 @@ const Navbar = () => {
                 <></>
               ) : (
                 <>
-                  <LoginModal
-                    loginOpen={loginOpen}
-                    setLoginOpen={setLoginOpen}
-                    user={user}
-                  />
+                  <Button
+                    onClick={() => {
+                      setLoginModalState(true);
+                    }}
+                    className="bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-sm"
+                  >
+                    Login
+                  </Button>
                   <Button className="text-sm p-0">
                     <Link href="/register" className="w-full px-4 py-2">
                       Register
@@ -90,7 +103,12 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      <TokenExpiredModal setLoginOpen={setLoginOpen} />
+      <TokenExpiredModal />
+      <LoginModal
+        loginOpen={loginOpen}
+        setLoginOpen={setLoginOpen}
+        user={user}
+      />
     </Fragment>
   );
 };

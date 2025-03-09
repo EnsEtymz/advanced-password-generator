@@ -26,4 +26,10 @@ const useExpireStore = create(
   )
 );
 
-export { useAuthStore, useExpireStore };
+const useLoginModalStore = create((set) => ({
+  loginModalState: false,
+  setLoginModalState: (newState) => set({ loginModalState: newState }),
+}));
+
+
+export { useAuthStore, useExpireStore, useLoginModalStore };

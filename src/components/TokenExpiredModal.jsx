@@ -1,4 +1,4 @@
-import { useExpireStore } from "@/app/authStore";
+import { useExpireStore, useLoginModalStore } from "@/app/authStore";
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,9 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-export function TokenExpiredModal({setLoginOpen}) {
+export function TokenExpiredModal() {
     const isState = useExpireStore((state) => state.isState);
     const setState = useExpireStore((state) => state.setState);
+    const setLoginModalState = useLoginModalStore((state) => state.setLoginModalState);
   return (
     <Dialog open={isState} onOpenChange={() => setState(false)}>
       <DialogContent className="sm:max-w-[425px] rounded-md">
@@ -24,7 +25,7 @@ export function TokenExpiredModal({setLoginOpen}) {
 </DialogHeader>
 
         <DialogFooter>
-          <Button type="button" onClick={()=>{setState(false); setLoginOpen(true); console.log("enes") }}>Login</Button>
+          <Button type="button" onClick={()=>{setState(false); setLoginModalState(true)  }}>Login</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

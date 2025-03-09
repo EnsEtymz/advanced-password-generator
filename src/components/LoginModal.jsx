@@ -20,21 +20,20 @@ import * as Yup from "yup";
 import { login } from "../../redux/authSlice";
 import Loader from "@/components/Loader";
 import { toast } from "sonner";
+import { useLoginModalStore } from "@/app/authStore";
 
 export function LoginModal({ loginOpen, setLoginOpen, user }) {
-  const [isOpen, setIsOpen] = useState(loginOpen);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const setLoginModalState = useLoginModalStore((state) => state.setLoginModalState);
 
   useEffect(() => {
     if (user) {
-      setIsOpen(false);
+      setLoginModalState(false);
     }
   }, [user]);
-  useEffect(() => {
-    setIsOpen(loginOpen);
-  }, [loginOpen]); 
 
+console.log("loginOpen", loginOpen);
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -56,7 +55,7 @@ export function LoginModal({ loginOpen, setLoginOpen, user }) {
             color: "#fff",
           },
         });
-        setIsOpen(false);
+        setLoginModalState(false);
       } else {
         toast.error("Login failed. Please try again.", {
           style: {
@@ -69,11 +68,9 @@ export function LoginModal({ loginOpen, setLoginOpen, user }) {
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => {setIsOpen(false); setLoginOpen(false)}}>
+    <Dialog open={loginOpen} onOpenChange={() => { setLoginModalState(false)}}>
       <DialogTrigger asChild>
-        <Button className="bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-sm">
-          Login
-        </Button>
+        
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] rounded-md">
         {loading && <Loader />} {/* Loader ekledik */}
@@ -143,7 +140,7 @@ export function LoginModal({ loginOpen, setLoginOpen, user }) {
             Don&apos;t have an account?
             <Link
               href="/register"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setLoginModalState(false)}
               className="underline underline-offset-4"
             >
               Sign up

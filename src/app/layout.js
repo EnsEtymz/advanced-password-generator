@@ -3,6 +3,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Suspense } from "react";
+import Loader from "@/components/Loader";
 
 export default function RootLayout({ children }) {
   return (
@@ -19,9 +21,11 @@ export default function RootLayout({ children }) {
         <Providers>
           <div className="flex flex-col min-h-screen justify-between ">
           <Navbar />
+          <Suspense fallback={<Loader />}>
           <main className="py-6">
           {children}
           </main>
+          </Suspense>
           <Footer /></div>
         </Providers>
         <Toaster />
