@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import useAuthStore from "./authStore";
 
 const defaultRangeValue = 12;
 const defaultToken = null;
@@ -52,9 +53,7 @@ export default function Home() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [rangeValue, setRangeValue] = useState(defaultRangeValue);
   const rangeRef = useRef(null);
-  const [token, setToken] = useState(
-    localStorage.getItem("token") ?? defaultToken
-  );
+  const token = useAuthStore.getState().token; 
   const [includeSettings, setIncludeSettings] = useState(
     defaultIncludeSettings
   );

@@ -1,8 +1,11 @@
+import useAuthStore from "@/app/authStore";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // API URL
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
+
+
 
 // Login İşlemi
 export const login = createAsyncThunk(
@@ -27,8 +30,8 @@ export const login = createAsyncThunk(
       const data = await response.json();
       console.log("Gelen veri:", data); // API'den ne geldiğini gör
       if (data.data.token) {
-        // Gelen doğru veriyi localStorage'a kaydet
-        localStorage.setItem("token", data.data.token);
+        const { setToken } = useAuthStore.getState(); // Zustand Store'a eriş
+        setToken(data.data.token); 
       } else {
         console.error("Token bulunamadı.");
       }
@@ -44,7 +47,7 @@ export const login = createAsyncThunk(
 
 // Kullanıcı Bilgisini Al
 export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
-  const token = localStorage.getItem("token");
+  const token = useAuthStore.getState().token; // Zustand Store'dan token al
   if (!token || token == undefined || token == null) return null;
 
   try {
@@ -74,7 +77,7 @@ export const register = createAsyncThunk(
       if (!response.ok) throw new Error("Kayıt başarısız!");
 
       const data = await response.json();
-      localStorage.setItem("token", data.accessToken); // Token'ı sakla
+      //localStorage.setItem("token", data.accessToken); // Token'ı sakla
 
       return data;
     } catch (error) {
@@ -85,7 +88,8 @@ export const register = createAsyncThunk(
 
 // Çıkış Yapma
 export const logout = createAsyncThunk("auth/logout", async () => {
-  localStorage.removeItem("token");
+  const { clearToken } = useAuthStore.getState(); // Zustand Store'dan token al
+  clearToken(); // Token'ı sil
   return null;
 });
 

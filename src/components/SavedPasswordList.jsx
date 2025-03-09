@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/table";
 import { CardContent } from "./ui/card";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
+import useAuthStore from "@/app/authStore";
 
 const invoices = [
   {
@@ -60,7 +61,7 @@ const invoices = [
 ];
 
 export function SavedPasswordList() {
-  const token = localStorage.getItem("token");
+  const token = useAuthStore((state) => state.token);
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
   const [passwords, setPasswords] = useState([]);
 
