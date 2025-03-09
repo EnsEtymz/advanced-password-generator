@@ -200,7 +200,7 @@ export function SavedPasswordList() {
         </div>
       </div>
       {passwords.length > 0 ? (
-      <div className="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+      <div className="relative flex flex-col w-full h-full text-gray-700 bg-white rounded-lg bg-clip-border">
         <table className="w-full text-left table-auto min-w-max">
           <thead>
             <tr>

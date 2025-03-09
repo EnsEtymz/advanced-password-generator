@@ -33,12 +33,21 @@ const includeDescriptions = {
   includeLowercase: "(abcdefgh)",
   includeUppercase: "(ABCDEFGH)",
 };
+const includeTitles = {
+  includeSymbols: "Symbols",
+  includeNumbers: "Numbers",
+  includeLowercase: "Lowercase",
+  includeUppercase: "Uppercase",
+};
 
 const excludeDescriptions = {
   excludeSimilar: "(i, l, 1, L, o, 0, O)",
   excludeAmbiguous: "({ } [ ] ( ) / \\ ' \" ` ~ , ; : . < >)",
 };
-
+const excludeTitles = {
+  excludeSimilar: "Exclude Similar",
+  excludeAmbiguous: "Exclude Ambiguous",
+};
 export default function Home() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [rangeValue, setRangeValue] = useState(defaultRangeValue);
@@ -356,16 +365,6 @@ export default function Home() {
                   </DialogHeader>
                   <div>
                     <div className="flex flex-col justify-start gap-3">
-                      <input
-                        type="text"
-                        name="token"
-                        id="token"
-                        value={token}
-                        onChange={(e) => setToken(e.target.value)}
-                        className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 block w-full p-2 mb-3"
-                        placeholder="Your token"
-                        required
-                      />
                       {Object.keys(excludeSettings).map((key) => (
                         <label
                           key={key}
@@ -379,9 +378,7 @@ export default function Home() {
                           />
                           <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-black after:absolute after:top-0.5 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
                           <span className="ms-3 text-sm font-medium text-gray-500">
-                            {key
-                              .replace(/([A-Z])/g, " $1")
-                              .replace(/^./, (str) => str.toUpperCase())}{" "}
+                            {excludeTitles[key]}{" "}
                             {excludeDescriptions[key]}
                           </span>
                         </label>
@@ -485,9 +482,7 @@ export default function Home() {
                     />
                     <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-black after:absolute after:top-0.5 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
                     <span className="ms-3 text-sm font-medium text-gray-500">
-                      {key
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, (str) => str.toUpperCase())}{" "}
+                      {includeTitles[key]}{" "}
                       {includeDescriptions[key]}
                     </span>
                   </label>
