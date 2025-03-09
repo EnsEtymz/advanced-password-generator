@@ -9,7 +9,8 @@ import { useAuthStore, useExpireStore } from "@/app/authStore";
 
 export function SavedPasswordList() {
   const token = useAuthStore((state) => state.token);
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [passwords, setPasswords] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -17,7 +18,7 @@ export function SavedPasswordList() {
   const [hasNext, setHasNext] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedPassword, setSelectedPassword] = useState(null);
-  const setState  = useExpireStore((state) => state.setState);
+  const setState = useExpireStore((state) => state.setState);
   const [searchText, setSearchText] = useState("");
 
   const getPasswords = async (page = 1, search_text = "") => {
@@ -73,7 +74,8 @@ export function SavedPasswordList() {
   };
 
   useEffect(() => {
-    if (!token) { return;
+    if (!token) {
+      return;
     }
     getPasswords(currentPage);
   }, [currentPage, token]); // currentPage veya token değiştiğinde çalıştır
@@ -96,39 +98,39 @@ export function SavedPasswordList() {
           <p className="text-slate-500">A list of your saved passwords.</p>
         </div>
         <div className="ml-3">
-            <div className="w-full max-w-sm min-w-[200px] relative">
+          <div className="w-full max-w-sm min-w-[200px] relative">
             <div className="relative">
-        <input
-          className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-          placeholder="Search for passwords..."
-          value={searchText} // input değeri state ile kontrol edilir
-          onChange={handleSearchChange} // input değeri değiştikçe state güncellenir
-        />
-        <button
-          className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
-          type="button"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="3"
-            stroke="currentColor"
-            className="w-8 h-8 text-slate-600"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            />
-          </svg>
-        </button>
-      </div>
+              <input
+                className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                placeholder="Search for passwords..."
+                value={searchText} // input değeri state ile kontrol edilir
+                onChange={handleSearchChange} // input değeri değiştikçe state güncellenir
+              />
+              <button
+                className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="3"
+                  stroke="currentColor"
+                  className="w-8 h-8 text-slate-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
+              </button>
             </div>
+          </div>
         </div>
       </div>
       {passwords.length > 0 ? (
-      
+        <div className="overflow-x-auto">
           <table className="w-full text-left table-auto min-w-max">
             <thead>
               <tr>
@@ -173,43 +175,43 @@ export function SavedPasswordList() {
               ))}
             </tbody>
           </table>
-        ) : (
+        </div>
+      ) : (
         <p className="text-center text-slate-500">No passwords found.</p>
       )}
-          {/* Sayfalama Butonları */}
+      {/* Sayfalama Butonları */}
 
-          <div className="flex justify-between items-center px-4 py-3">
-            <div className="text-sm text-slate-500">
-              Page{" "}
-              <b>
-                {currentPage} of {totalPages}
-              </b>
-            </div>
-            <div className="flex space-x-1">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`px-3 py-1.5 min-w-9 text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
-                  currentPage === 1 ? "bg-slate-50" : "bg-white"
-                }`}
-              >
-                Prev
-              </button>
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={!hasNext}
-                className={`px-3 py-1.5 min-w-9  text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
-                  !hasNext ? "bg-slate-50" : "bg-white "
-                }`}
-              >
-                Next
-              </button>
-            </div>
-          </div>
+      <div className="flex justify-between items-center px-4 py-3">
+        <div className="text-sm text-slate-500">
+          Page{" "}
+          <b>
+            {currentPage} of {totalPages}
+          </b>
+        </div>
+        <div className="flex space-x-1">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-3 py-1.5 min-w-9 text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
+              currentPage === 1 ? "bg-slate-50" : "bg-white"
+            }`}
+          >
+            Prev
+          </button>
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={!hasNext}
+            className={`px-3 py-1.5 min-w-9  text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
+              !hasNext ? "bg-slate-50" : "bg-white "
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      </div>
 
-     
       <PasswordShowModal
         showPassword={showPassword}
         setShowPassword={setShowPassword}
