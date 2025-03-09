@@ -1,3 +1,4 @@
+'use client'; 
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "./ui/checkbox";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
@@ -20,19 +21,25 @@ import { login } from "../../redux/authSlice";
 import Loader from "@/components/Loader";
 import { toast } from "sonner";
 
-export function LoginModal({ loginOpen, user, setUser }) {
+export function LoginModal({ loginOpen, user }) {
   const [isOpen, setIsOpen] = useState(loginOpen);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (user) {
+      setIsOpen(false);
+    }
+  }, [user]);
+
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
       remember_me: false,
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email").required("Email is required"),
+      username: Yup.string().email("Invalid email").required("Email is required"),
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: async (values) => {
@@ -47,7 +54,6 @@ export function LoginModal({ loginOpen, user, setUser }) {
           },
         });
         setIsOpen(false);
-        setUser(true);
       } else {
         toast.error("Login failed. Please try again.", {
           style: {
@@ -77,15 +83,15 @@ export function LoginModal({ loginOpen, user, setUser }) {
         <form onSubmit={formik.handleSubmit}>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Email</Label>
               <Input
-                id="email"
+                id="username"
                 type="email"
                 placeholder="m@example.com"
-                {...formik.getFieldProps("email")}
+                {...formik.getFieldProps("username")}
               />
-              {formik.touched.email && formik.errors.email && (
-                <p className="text-red-500 text-xs">{formik.errors.email}</p>
+              {formik.touched.username && formik.errors.username && (
+                <p className="text-red-500 text-xs">{formik.errors.username}</p>
               )}
             </div>
             <div className="grid gap-2">

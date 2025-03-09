@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 
 const defaultRangeValue = 12;
-const defaultToken = "";
+const defaultToken = null;
 const defaultIncludeSettings = {
   includeSymbols: false,
   includeNumbers: true,
@@ -43,7 +43,9 @@ export default function Home() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [rangeValue, setRangeValue] = useState(defaultRangeValue);
   const rangeRef = useRef(null);
-  const [token, setToken] = useState(defaultToken);
+  const [token, setToken] = useState(
+    localStorage.getItem("token") ?? defaultToken
+  );
   const [includeSettings, setIncludeSettings] = useState(
     defaultIncludeSettings
   );
@@ -52,8 +54,7 @@ export default function Home() {
   );
   const [generatedPassword, setGeneratedPassword] = useState("");
   const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ??
-    "https://devtools-api.beratcarsi.com";
+    process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [isOpen, setIsOpen] = useState(false);
   const [passwordName, setPasswordName] = useState("");
 
@@ -92,8 +93,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const storedToken = Cookies.get("token");
-    setToken(storedToken !== undefined ? storedToken : defaultToken);
     const storedRangeValue = Cookies.get("rangeValue");
     setRangeValue(
       storedRangeValue !== undefined
@@ -118,8 +117,7 @@ export default function Home() {
 
   useEffect(() => {
     Cookies.set("rangeValue", rangeValue, { expires: 365 });
-    Cookies.set("token", token, { expires: 365 });
-  }, [rangeValue, token]);
+  }, [rangeValue]);
 
   // Checkbox değiştiğinde ilgili state'i güncelle
   const toggleIncludeSetting = (key) => {
@@ -261,16 +259,18 @@ export default function Home() {
       return;
     }
     const requestData = {
-      api_key: token,
-      title: passwordName,
+      name: passwordName,
       password: generatedPassword,
-      hint: "Generated password",
+      hint: "Hint test",
     };
 
     try {
-      const response = await fetch(`${baseUrl}/password-generator/save`, {
+      const response = await fetch(`${baseUrl}/password-generator`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(requestData),
       });
 
@@ -381,7 +381,8 @@ export default function Home() {
                           <span className="ms-3 text-sm font-medium text-gray-500">
                             {key
                               .replace(/([A-Z])/g, " $1")
-                              .replace(/^./, (str) => str.toUpperCase())} {excludeDescriptions[key]}
+                              .replace(/^./, (str) => str.toUpperCase())}{" "}
+                            {excludeDescriptions[key]}
                           </span>
                         </label>
                       ))}
