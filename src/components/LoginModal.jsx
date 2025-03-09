@@ -31,6 +31,9 @@ export function LoginModal({ loginOpen, user }) {
       setIsOpen(false);
     }
   }, [user]);
+  useEffect(() => {
+    setIsOpen(loginOpen);
+  }, [loginOpen]);
 
   const formik = useFormik({
     initialValues: {

@@ -134,43 +134,47 @@ const PasswordResultModal = ({
           </div>
         </div>
         <div
-          id="save-area"
-          className="flex flex-col md:flex-row gap-4 items-center max-w-full"
-        >
-          <div className="relative flex items-center w-full md:w-auto lg:max-w-full overflow-hidden">
-            <input
-              type="text"
-              id="passwordNameInput"
-              value={passwordName}
-              onChange={(e) => setPasswordName(e.target.value)}
-              className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-full transition-all duration-200"
-              placeholder="Password name"
-            />
-          </div>
-          <button
-            id="saved-button"
-            onClick={() => savePassword()}
-            type="submit"
-            className="w-full md:w-36 text-sm font-semibold bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white p-2 rounded-md text-center flex items-center justify-center"
-          >
-            <span id="button-text">Save</span>
-            <svg
-              id="check-icon"
-              className="w-5 h-5 text-white mx-auto hidden"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </button>
-        </div>
+  id="save-area"
+  className="flex flex-col md:flex-row gap-4 items-center max-w-full"
+>
+  <div className="relative flex items-center w-full md:w-auto lg:max-w-full overflow-hidden">
+    <input
+      type="text"
+      id="passwordNameInput"
+      value={passwordName}
+      onChange={(e) => setPasswordName(e.target.value)}
+      className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out"
+      placeholder="Password name"
+      style={{
+        width: passwordName.length > 0 ? `${Math.max(8, passwordName.length)}ch` : "auto",
+      }}
+    />
+  </div>
+  <button
+    id="saved-button"
+    onClick={() => savePassword()}
+    type="submit"
+    className="w-full md:w-36 text-sm font-semibold bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white p-2 rounded-md text-center flex items-center justify-center"
+  >
+    <span id="button-text">Save</span>
+    <svg
+      id="check-icon"
+      className="w-5 h-5 text-white mx-auto hidden"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
+  </button>
+</div>
+
       </div>
       {/*Skeleton*/}
       <div

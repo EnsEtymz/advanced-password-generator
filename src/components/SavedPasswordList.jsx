@@ -3,9 +3,9 @@ import { CardContent } from "./ui/card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import useAuthStore from "@/app/authStore";
 import { Eye, EyeOff } from "lucide-react";
 import { PasswordShowModal } from "./PasswordShowModal";
+import { useAuthStore, useExpireStore } from "@/app/authStore";
 
 export function SavedPasswordList() {
   const token = useAuthStore((state) => state.token);
@@ -15,6 +15,7 @@ export function SavedPasswordList() {
   const [totalPages, setTotalPages] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedPassword, setSelectedPassword] = useState(null);
+  const setState  = useExpireStore((state) => state.setState);
 
   const getPasswords = async (page = 1) => {
     try {
@@ -29,18 +30,13 @@ export function SavedPasswordList() {
         }
       );
 
-      if (!response.ok) {
-        toast.error("Passwords method is not defined!", {
-          style: { background: "#000", color: "#fff" },
-        });
-        return;
-      }
-
       const res = await response.json();
       if (res.is_success && res.data) {
         setPasswords(res.data.items);
         setCurrentPage(res.data.current_page);
         setTotalPages(res.data.total_pages);
+      }else if (res.status_code == 401) {
+        setState(true);
       } else {
         toast.error("Passwords is not defined!", {
           style: { background: "#000", color: "#fff" },
@@ -121,7 +117,7 @@ export function SavedPasswordList() {
                   <td className="p-4 text-sm border-b border-slate-200 flex gap-1">
                     ********
                     <Eye
-                      className="cursor-pointer"
+                      className="cursor-pointer text-black"
                       size={14}
                       onClick={() => {
                         setSelectedPassword(password);

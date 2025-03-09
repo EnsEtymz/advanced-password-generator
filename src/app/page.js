@@ -13,7 +13,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import useAuthStore from "./authStore";
+import { useAuthStore } from "./authStore";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 
 const defaultRangeValue = 12;
 const defaultToken = null;
@@ -450,7 +452,7 @@ export default function Home() {
                         )
                       }
                     >
-                      &lt;
+                      <ChevronLeft size={16} />
                     </button>
                     <button
                       className="font-bold hover:bg-[#F0F2F5] text-gray-500 px-2 h-7 rounded-md flex items-center justify-center"
@@ -460,7 +462,7 @@ export default function Home() {
                         )
                       }
                     >
-                      &gt;
+                      <ChevronRight size={16}/>
                     </button>
                   </div>
                 </div>
@@ -507,7 +509,7 @@ export default function Home() {
               id="generate-copy-button"
               className="w-36 text-sm font-semibold bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white py-2 rounded-md text-center items-center"
             >
-              Generate &amp; Copy
+              Generate & Copy
             </button>
           </div>
         </div>

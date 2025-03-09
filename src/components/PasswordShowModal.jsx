@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useAuthStore from "@/app/authStore";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { useAuthStore, useExpireStore } from "@/app/authStore";
 
 export function PasswordShowModal({
   showPassword,
@@ -25,11 +26,15 @@ export function PasswordShowModal({
   const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [password, setPassword] = useState();
   const [copied, setCopied] = useState(false);  // Kopyalandı durumu için state
+  const setState = useExpireStore((state) => state.setState);
 
   useEffect(() => {
+
     if (!selectedPassword || !token) return; // Token veya seçili şifre yoksa durdur
 
     const getPasswords = async () => {
+      setCopied(false);
+    setPassword(null); // Her seferinde kopyalandı durumunu ve şifreyi sıfırla
       try {
         const response = await fetch(
           `${baseUrl}/password-generator/${selectedPassword.id}`,
@@ -42,18 +47,14 @@ export function PasswordShowModal({
           }
         );
 
-        if (!response.ok) {
-          toast.error("Passwords method is not defined!", {
-            style: { background: "#000", color: "#fff" },
-          });
-          return;
-        }
-
         const res = await response.json();
         if (res.is_success && res.data) {
           setPassword(res.data.pass);
           console.log("Password:", res.data);
-        } else {
+        } else if (res.status_code == 401) {
+          setState(true);
+        }
+         else {
           toast.error("Passwords is not defined!", {
             style: { background: "#000", color: "#fff" },
           });
@@ -67,7 +68,7 @@ export function PasswordShowModal({
     };
 
     getPasswords();
-  }, [selectedPassword, token]);
+  },[selectedPassword, token]);
 
   const handleCopy = () => {
     // Kopyalama işlemi
@@ -94,11 +95,12 @@ export function PasswordShowModal({
   };
 
   return (
-    selectedPassword ? (  
-      <Dialog open={showPassword} onOpenChange={()=>{setShowPassword(); setPassword(""); setCopied(false);}}>
+    password ? (  
+      <Dialog open={showPassword} onOpenChange={setShowPassword}  >
         <DialogContent className="sm:max-w-md rounded-md">
           <DialogHeader>
             <DialogTitle>{selectedPassword.name}</DialogTitle>
+            <DialogDescription>{""}</DialogDescription>
           </DialogHeader>
           <div className="flex items-center space-x-2">
             <div className="grid flex-1 gap-2">

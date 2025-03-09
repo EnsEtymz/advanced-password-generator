@@ -1,4 +1,4 @@
-import useAuthStore from "@/app/authStore";
+import { useAuthStore } from "@/app/authStore";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // API URL

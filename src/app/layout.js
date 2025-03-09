@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <div className="flex flex-col min-h-screen justify-between ">
           <Navbar />
-          <main className="py-12">
+          <main className="py-6">
           {children}
           </main>
           <Footer /></div>

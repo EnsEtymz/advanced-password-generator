@@ -14,4 +14,16 @@ const useAuthStore = create(
   )
 );
 
-export default useAuthStore;
+const useExpireStore = create(
+  persist(
+    (set) => ({
+      isState:  false,
+      setState: (newState) => set({ isState: newState }),
+    }),
+    {
+      name: "isState", // localStorage'da kaydedilecek isim
+    }
+  )
+);
+
+export { useAuthStore, useExpireStore };
