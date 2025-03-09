@@ -13,14 +13,17 @@ export function SavedPasswordList() {
   const [passwords, setPasswords] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [hasPrevious, setHasPrevious] = useState(false);
+  const [hasNext, setHasNext] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedPassword, setSelectedPassword] = useState(null);
   const setState  = useExpireStore((state) => state.setState);
+  const [searchText, setSearchText] = useState("");
 
-  const getPasswords = async (page = 1) => {
+  const getPasswords = async (page = 1, search_text = "") => {
     try {
       const response = await fetch(
-        `${baseUrl}/password-generator/query?page=${page}&size=3`,
+        `${baseUrl}/password-generator/query?page=${page}&size=5&search_text=${search_text}`,
         {
           method: "GET",
           headers: {
@@ -35,10 +38,12 @@ export function SavedPasswordList() {
         setPasswords(res.data.items);
         setCurrentPage(res.data.current_page);
         setTotalPages(res.data.total_pages);
-      }else if (res.status_code == 401) {
+        setHasPrevious(res.data.has_previous_page);
+        setHasNext(res.data.has_next_page);
+      } else if (res.status_code == 401) {
         setState(true);
       } else {
-        toast.error("Passwords is not defined!", {
+        toast.error("Passwords are not defined!", {
           style: { background: "#000", color: "#fff" },
         });
       }
@@ -48,6 +53,11 @@ export function SavedPasswordList() {
         style: { background: "#000", color: "#fff" },
       });
     }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value); // input değerini state'e ata
+    getPasswords(currentPage, e.target.value); // Arama yaparken getPasswords'ı çağır
   };
 
   const formatDate = (dateString) => {
@@ -63,7 +73,8 @@ export function SavedPasswordList() {
   };
 
   useEffect(() => {
-    if (!token) return; // Token yoksa işlemi durdur
+    if (!token) { return;
+    }
     getPasswords(currentPage);
   }, [currentPage, token]); // currentPage veya token değiştiğinde çalıştır
 
@@ -84,10 +95,40 @@ export function SavedPasswordList() {
           <h3 className="text-lg font-semibold text-slate-800">My Passwords</h3>
           <p className="text-slate-500">A list of your saved passwords.</p>
         </div>
+        <div className="ml-3">
+            <div className="w-full max-w-sm min-w-[200px] relative">
+            <div className="relative">
+        <input
+          className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+          placeholder="Search for passwords..."
+          value={searchText} // input değeri state ile kontrol edilir
+          onChange={handleSearchChange} // input değeri değiştikçe state güncellenir
+        />
+        <button
+          className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+          type="button"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="3"
+            stroke="currentColor"
+            className="w-8 h-8 text-slate-600"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </button>
       </div>
-
+            </div>
+        </div>
+      </div>
       {passwords.length > 0 ? (
-        <>
+      
           <table className="w-full text-left table-auto min-w-max">
             <thead>
               <tr>
@@ -132,7 +173,9 @@ export function SavedPasswordList() {
               ))}
             </tbody>
           </table>
-
+        ) : (
+        <p className="text-center text-slate-500">No passwords found.</p>
+      )}
           {/* Sayfalama Butonları */}
 
           <div className="flex justify-between items-center px-4 py-3">
@@ -156,19 +199,17 @@ export function SavedPasswordList() {
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
-                disabled={currentPage === totalPages}
+                disabled={!hasNext}
                 className={`px-3 py-1.5 min-w-9  text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
-                  currentPage === totalPages ? "bg-slate-50" : "bg-white "
+                  !hasNext ? "bg-slate-50" : "bg-white "
                 }`}
               >
                 Next
               </button>
             </div>
           </div>
-        </>
-      ) : (
-        <p className="text-center text-slate-500">No passwords found.</p>
-      )}
+
+     
       <PasswordShowModal
         showPassword={showPassword}
         setShowPassword={setShowPassword}

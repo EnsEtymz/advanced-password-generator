@@ -90,6 +90,7 @@ export const register = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async () => {
   const { clearToken } = useAuthStore.getState(); // Zustand Store'dan token al
   clearToken(); // Token'ı sil
+  window.location.href = "/"; // Anasayfaya yönlendir
   return null;
 });
 
