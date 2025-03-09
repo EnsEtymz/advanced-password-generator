@@ -9,7 +9,7 @@ import { PasswordShowModal } from "./PasswordShowModal";
 
 export function SavedPasswordList() {
   const token = useAuthStore((state) => state.token);
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [passwords, setPasswords] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

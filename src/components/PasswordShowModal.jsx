@@ -22,7 +22,7 @@ export function PasswordShowModal({
   selectedPassword,
 }) {
   const token = useAuthStore((state) => state.token);
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [password, setPassword] = useState();
   const [copied, setCopied] = useState(false);  // Kopyalandı durumu için state
 
