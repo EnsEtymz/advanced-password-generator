@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <Fragment>
-      <div className="py-3 px-6 border-t-4 border-[#34c75a] flex items-center justify-between gap-6 bg-white">
+      <div className="py-3 px-6 border-t-4 border-[#34c75a] flex items-center justify-between gap-6 bg-white dark:bg-black">
         <Link href="/">
           <Image src="/logo.png" alt="Logo" width={120} height={25} />
         </Link>

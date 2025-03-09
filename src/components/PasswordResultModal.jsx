@@ -49,7 +49,7 @@ const PasswordResultModal = ({
     >
       <div
         id="password-content"
-        className="bg-white p-8 rounded-lg md:shadow-lg w-full lg:w-1/2 min-h-64"
+        className="bg-white dark:bg-black dark:border p-8 rounded-lg md:shadow-lg w-full lg:w-1/2 min-h-64"
       >
         <div className="w-full gap-4 border-b pb-4">
           <div className="flex justify-between items-center">
@@ -58,7 +58,7 @@ const PasswordResultModal = ({
             </h2>
             <button
               onClick={() => setVisibleModal(false)}
-              className="font-bold hover:bg-[#F0F2F5] text-gray-500 px-2 py-2 rounded-md flex items-center justify-center text-center"
+              className="font-bold hover:bg-[#F0F2F5] text-gray-500 px-2 py-2 rounded-md flex items-center justify-center text-center dark:text-white dark:hover:bg-[#1a1a1a] "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@ const PasswordResultModal = ({
       id="passwordNameInput"
       value={passwordName}
       onChange={(e) => setPasswordName(e.target.value)}
-      className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out"
+      className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out dark:bg-black dark:border-gray-500 dark:text-white"
       placeholder="Password name"
       style={{
         width: passwordName.length > 0 ? `${Math.max(8, passwordName.length)}ch` : "auto",

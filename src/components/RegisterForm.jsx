@@ -58,11 +58,11 @@ export function RegisterForm({ className, ...props }) {
 
   return (
     <div
-      className={cn("flex flex-col gap-6 w-full lg:w-3/5 ", className)}
+      className={cn("flex flex-col gap-6 w-full lg:w-3/5  dark:lg:border-2 ", className)}
       {...props}
     >
       {loading && <Loader />} {/* Loader burada gösterilecek */}
-      <Card className="overflow-hidden border-none lg:border rounded-md">
+      <Card className="overflow-hidden border-none lg:border rounded-md  ">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form onSubmit={formik.handleSubmit} className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
@@ -126,12 +126,12 @@ export function RegisterForm({ className, ...props }) {
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full dark:text-black dark:bg-[#34c75a] transition duration-200 dark:hover:bg-[#2aa24a]" disabled={loading}>
                 {loading ? "Signing Up..." : "Sign Up"}
               </Button>
             </div>
           </form>
-          <div className="relative hidden bg-white flex-col items-center justify-center md:flex">
+          <div className="relative hidden bg-white flex-col items-center justify-center md:flex dark:bg-black">
             <img src="/logo.png" alt="Image" className="inset-0  w-4/5 " />
           </div>
         </CardContent>

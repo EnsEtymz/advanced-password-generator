@@ -324,7 +324,7 @@ export default function Home() {
   return (
     <Fragment>
       <div className="flex flex-col items-center md:justify-center ">
-        <div className="bg-white p-8 rounded-lg md:shadow-lg w-full md:h-auto lg:w-1/2">
+        <div className="bg-white  p-8 rounded-lg md:shadow-lg w-full md:h-auto lg:w-1/2 dark:bg-black  dark:border-2 ">
           <div className="w-full gap-4 border-b pb-4">
             <div className="flex justify-between items-center">
               <h2 className="text-xl lg:text-2xl font-bold">
@@ -336,7 +336,7 @@ export default function Home() {
                     id="dropdownMenuIconButton"
                     data-modal-target="settings-modal"
                     data-modal-toggle="settings-modal"
-                    className="font-bold hover:bg-[#F0F2F5] text-gray-500 px-2 py-2 rounded-md flex items-center justify-center text-center"
+                    className="font-bold hover:bg-[#F0F2F5] text-gray-500 dark:text-white px-2 py-2 rounded-md flex items-center justify-center text-center  dark:hover:bg-[#1a1a1a]"
                     type="button"
                   >
                     <svg
@@ -377,8 +377,8 @@ export default function Home() {
                             onChange={() => toggleExcludeSetting(key)}
                             className="sr-only peer"
                           />
-                          <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-black after:absolute after:top-0.5 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
-                          <span className="ms-3 text-sm font-medium text-gray-500">
+                          <div className="relative w-11 h-6 bg-gray-200 dark:bg-gray-500 rounded-full peer peer-checked:bg-black dark:peer-checked:bg-gray-800 after:absolute after:top-0.5 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
+                          <span className="ms-3 text-sm font-medium text-gray-500 dark:text-white">
                             {excludeTitles[key]}{" "}
                             {excludeDescriptions[key]}
                           </span>
@@ -423,7 +423,7 @@ export default function Home() {
           <div>
             <div className="flex flex-col gap-6 py-6">
               <div className="w-5/6 md:w-2/3">
-                <label className="block text-sm font-medium text-gray-500 mb-3">
+                <label className="block text-sm font-medium text-gray-500 dark:text-white mb-3">
                   Length:
                   <input
                     type="text"
@@ -433,7 +433,7 @@ export default function Home() {
                     onBlur={handleInputBlur}
                   />
                 </label>
-                <div className="flex items-center space-x-2 bg-white">
+                <div className="flex items-center space-x-2 bg-white dark:bg-black ">
                   <input
                     ref={rangeRef}
                     type="range"
@@ -441,11 +441,11 @@ export default function Home() {
                     max={128}
                     value={rangeValue}
                     onChange={handleRangeChange}
-                    className="flex-1 bg-red-500 h-2 rounded-full cursor-pointer"
+                    className="flex-1  h-2 rounded-full cursor-pointer"
                   />
                   <div className="flex gap-0.5">
                     <button
-                      className="font-bold hover:bg-[#F0F2F5] text-gray-500 px-2 h-7 rounded-md flex items-center justify-center"
+                      className="font-bold hover:bg-[#F0F2F5] text-gray-500 dark:text-white px-2 h-7 rounded-md flex items-center justify-center"
                       onClick={() =>
                         setRangeValue((prev) =>
                           Math.max(parseInt(prev, 10) - 1, 6)
@@ -455,7 +455,7 @@ export default function Home() {
                       <ChevronLeft size={16} />
                     </button>
                     <button
-                      className="font-bold hover:bg-[#F0F2F5] text-gray-500 px-2 h-7 rounded-md flex items-center justify-center"
+                      className="font-bold hover:bg-[#F0F2F5] text-gray-500 dark:text-white px-2 h-7 rounded-md flex items-center justify-center"
                       onClick={() =>
                         setRangeValue((prev) =>
                           Math.min(parseInt(prev, 10) + 1, 128)
@@ -481,8 +481,8 @@ export default function Home() {
                       onChange={() => toggleIncludeSetting(key)}
                       className="sr-only peer"
                     />
-                    <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-black after:absolute after:top-0.5 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
-                    <span className="ms-3 text-sm font-medium text-gray-500">
+                    <div className="relative w-11 h-6 bg-gray-200 dark:bg-gray-500 rounded-full peer peer-checked:bg-black dark:peer-checked:bg-gray-800 after:absolute after:top-0.5 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
+                    <span className="ms-3 text-sm font-medium text-gray-500 dark:text-white">
                       {includeTitles[key]}{" "}
                       {includeDescriptions[key]}
                     </span>
