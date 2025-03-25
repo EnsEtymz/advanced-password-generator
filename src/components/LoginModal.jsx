@@ -130,7 +130,7 @@ console.log("loginOpen", loginOpen);
             </div>
             <Button
               type="submit"
-              className="w-full hover:bg-[#34c75a] text-white dark:text-black dark:bg-[#34c75a] transition duration-200 dark:hover:bg-[#2aa24a] "
+              className="w-full hover:bg-[#34c75a] text-white dark:text-black dark:bg-[#34c75a] transition duration-300 dark:hover:bg-[#2aa24a] "
               disabled={loading}
             >
               {loading ? "Logging in..." : "Login"}

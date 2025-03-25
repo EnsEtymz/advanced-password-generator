@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 import { PasswordShowModal } from "./PasswordShowModal";
 import { useAuthStore, useExpireStore } from "@/app/authStore";
+import Loader from "./Loader";
 
 export function SavedPasswordList() {
   const token = useAuthStore((state) => state.token);
@@ -20,8 +21,10 @@ export function SavedPasswordList() {
   const [selectedPassword, setSelectedPassword] = useState(null);
   const setState = useExpireStore((state) => state.setState);
   const [searchText, setSearchText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getPasswords = async (page = 1, search_text = "") => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${baseUrl}/password-generator/query?page=${page}&size=5&search_text=${search_text}`,
@@ -53,6 +56,8 @@ export function SavedPasswordList() {
       toast.error("An error occurred!", {
         style: { background: "#000", color: "#fff" },
       });
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -80,9 +85,9 @@ export function SavedPasswordList() {
     getPasswords(currentPage);
   }, [currentPage, token]); // currentPage veya token değiştiğinde çalıştır
 
-  return (
-    <CardContent className="flex flex-col gap-6 w-full lg:w-3/5 bg-white rounded-md">
-      <div className="relative bg-white flex flex-col items-center justify-center">
+  return(
+    <CardContent className="flex flex-col gap-6 w-full lg:w-3/5 bg-white rounded-md dark:bg-black dark:border-2">
+      <div className="relative bg-white flex flex-col items-center justify-center dark:bg-black">
         <Image
           src="/logo.png"
           alt="Image"
@@ -91,23 +96,23 @@ export function SavedPasswordList() {
           height={70}
         />
       </div>
-
+  
       <div className="w-full flex justify-between items-center mb-3 mt-1 pl-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-800">My Passwords</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">My Passwords</h3>
           <p className="text-slate-500">A list of your saved passwords.</p>
         </div>
         <div className="ml-3">
           <div className="w-full max-w-sm min-w-[200px] relative">
             <div className="relative">
               <input
-                className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                className="bg-white dark:bg-[#1a1a1a] w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 dark:border-slate-700 dark:text-white rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                 placeholder="Search for passwords..."
-                value={searchText} // input değeri state ile kontrol edilir
-                onChange={handleSearchChange} // input değeri değiştikçe state güncellenir
+                value={searchText}
+                onChange={handleSearchChange}
               />
               <button
-                className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white dark:bg-[#1a1a1a] rounded"
                 type="button"
               >
                 <svg
@@ -129,21 +134,26 @@ export function SavedPasswordList() {
           </div>
         </div>
       </div>
-      {passwords.length > 0 ? (
+  
+      {loading ? (
+        <div className="flex flex-col  justify-center items-center text-center">
+              <div className="w-12 h-12 border-4 border-[#34c75a] border-t-transparent rounded-full animate-spin"></div></div>
+
+      ) : passwords.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="w-full text-left table-auto min-w-max">
             <thead>
               <tr>
-                <th className="p-4 border-b border-slate-200 bg-slate-50 text-sm font-normal text-slate-500">
+                <th className="p-4 border-b border-slate-200 bg-slate-50 dark:bg-[#1a1a1a] dark:text-white text-sm font-normal text-slate-500">
                   Name
                 </th>
-                <th className="p-4 border-b border-slate-200 bg-slate-50 text-sm font-normal text-slate-500">
+                <th className="p-4 border-b border-slate-200 bg-slate-50 dark:bg-[#1a1a1a] dark:text-white text-sm font-normal text-slate-500">
                   Hint
                 </th>
-                <th className="p-4 border-b border-slate-200 bg-slate-50 text-sm font-normal text-slate-500">
+                <th className="p-4 border-b border-slate-200 bg-slate-50 dark:bg-[#1a1a1a] dark:text-white text-sm font-normal text-slate-500">
                   Password
                 </th>
-                <th className="p-4 border-b border-slate-200 bg-slate-50 text-sm font-normal text-slate-500">
+                <th className="p-4 border-b border-slate-200 bg-slate-50 dark:bg-[#1a1a1a] dark:text-white text-sm font-normal text-slate-500">
                   CreatedOn
                 </th>
               </tr>
@@ -151,16 +161,16 @@ export function SavedPasswordList() {
             <tbody>
               {passwords.map((password) => (
                 <tr key={password.id}>
-                  <td className="p-4 text-sm border-b border-slate-200 font-semibold">
+                  <td className="p-4 text-sm border-b border-slate-200 dark:border-slate-700 font-semibold">
                     {password.name}
                   </td>
-                  <td className="p-4 text-sm border-b border-slate-200">
+                  <td className="p-4 text-sm border-b border-slate-200 dark:border-slate-700">
                     {password.hint}
                   </td>
-                  <td className="p-4 text-sm border-b border-slate-200 flex gap-1">
+                  <td className="p-4 text-sm border-b border-slate-200 dark:border-slate-700 flex gap-1">
                     ********
                     <Eye
-                      className="cursor-pointer text-black"
+                      className="cursor-pointer text-black dark:text-white"
                       size={14}
                       onClick={() => {
                         setSelectedPassword(password);
@@ -168,7 +178,7 @@ export function SavedPasswordList() {
                       }}
                     />
                   </td>
-                  <td className="p-4 text-sm border-b border-slate-200">
+                  <td className="p-4 text-sm border-b border-slate-200 dark:border-slate-700">
                     {formatDate(password.created_on)}
                   </td>
                 </tr>
@@ -179,8 +189,7 @@ export function SavedPasswordList() {
       ) : (
         <p className="text-center text-slate-500">No passwords found.</p>
       )}
-      {/* Sayfalama Butonları */}
-
+  
       <div className="flex justify-between items-center px-4 py-3">
         <div className="text-sm text-slate-500">
           Page{" "}
@@ -192,26 +201,24 @@ export function SavedPasswordList() {
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className={`px-3 py-1.5 min-w-9 text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
-              currentPage === 1 ? "bg-slate-50" : "bg-white"
+            className={`px-3 py-1.5 min-w-9 text-sm font-normal text-slate-500 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
+              currentPage === 1 ? "bg-slate-50 dark:bg-[#1a1a1a]" : "bg-white dark:bg-slate-700"
             }`}
           >
             Prev
           </button>
           <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={!hasNext}
-            className={`px-3 py-1.5 min-w-9  text-sm font-normal text-slate-500  border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
-              !hasNext ? "bg-slate-50" : "bg-white "
+            className={`px-3 py-1.5 min-w-9 text-sm font-normal text-slate-500 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease ${
+              !hasNext ? "bg-slate-50 dark:bg-[#1a1a1a]" : "bg-white dark:bg-slate-700"
             }`}
           >
             Next
           </button>
         </div>
       </div>
-
+  
       <PasswordShowModal
         showPassword={showPassword}
         setShowPassword={setShowPassword}

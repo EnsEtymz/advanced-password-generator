@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, use, useEffect, useRef, useState } from "react";
 import PasswordResultModal from "../components/PasswordResultModal";
 import "./globals.css";
 import { toast } from "sonner";
@@ -13,12 +13,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useAuthStore } from "./authStore";
+import { useAuthStore, useExpireStore, useLoginModalStore } from "./authStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 
 const defaultRangeValue = 12;
-const defaultToken = null;
 const defaultIncludeSettings = {
   includeSymbols: false,
   includeNumbers: true,
@@ -67,6 +66,8 @@ export default function Home() {
     process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [isOpen, setIsOpen] = useState(false);
   const [passwordName, setPasswordName] = useState("");
+  const setState = useExpireStore((state) => state.setState);
+  const setLoginModalState = useLoginModalStore((state) => state.setLoginModalState);
 
   // İlk açılışta include değerlerini yükle
   useEffect(() => {
@@ -249,14 +250,18 @@ export default function Home() {
     }
   };
 
+
+
   const savePassword = async () => {
+    const token = await useAuthStore.getState().token;
     if (!token) {
-      toast.error("Please enter your token!", {
+      toast.error("Please log in.", {
         style: {
           background: "#000",
           color: "#fff",
         },
       });
+      setLoginModalState(true);
       return;
     }
     if (!passwordName) {
@@ -272,6 +277,7 @@ export default function Home() {
       name: passwordName,
       password: generatedPassword,
       hint: "Hint test",
+      tag_ids: null,
     };
 
     try {
@@ -284,16 +290,6 @@ export default function Home() {
         body: JSON.stringify(requestData),
       });
 
-      if (!response.ok) {
-        toast.error("Password could not be saved!", {
-          style: {
-            background: "#000",
-            color: "#fff",
-          },
-        });
-        return;
-      }
-
       const res = await response.json();
       if (res.is_success && res.data) {
         toast.success("Password saved successfully!", {
@@ -302,7 +298,9 @@ export default function Home() {
             color: "#fff",
           },
         });
-      } else {
+      } else if (res.status_code == 401) {
+        setState(true);
+      }else {
         toast.error("Password could not be saved!", {
           style: {
             background: "#000",

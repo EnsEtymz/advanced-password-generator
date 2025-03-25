@@ -6,7 +6,6 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
 
 
-
 // Login İşlemi
 export const login = createAsyncThunk(
   "auth/token",
@@ -86,6 +85,26 @@ export const register = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk("auth/changePassword", async ({ old_password, new_password }, thunkAPI) => {
+  const token = useAuthStore.getState().token;
+  try {
+    const response = await fetch(`${API_URL}/change-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ old_password, new_password }),
+    });
+
+    if (!response.ok) throw new Error("Şifre değiştirilemedi!");
+
+    return await response.json();
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
 // Çıkış Yapma
 export const logout = createAsyncThunk("auth/logout", async () => {
   const { clearToken } = useAuthStore.getState(); // Zustand Store'dan token al
@@ -117,6 +136,9 @@ const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.user = action.payload;
       });
   },
 });

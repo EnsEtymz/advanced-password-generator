@@ -126,7 +126,7 @@ export function RegisterForm({ className, ...props }) {
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full dark:text-black dark:bg-[#34c75a] transition duration-200 dark:hover:bg-[#2aa24a]" disabled={loading}>
+              <Button type="submit" className="w-full hover:bg-[#34c75a] text-white dark:text-black dark:bg-[#34c75a] transition duration-300 dark:hover:bg-[#2aa24a] " disabled={loading}>
                 {loading ? "Signing Up..." : "Sign Up"}
               </Button>
             </div>

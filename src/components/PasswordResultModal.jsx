@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { TagsListModal } from "./TagsListModal";
+import { TagsListCombobox } from "./TagsListCombobox";
+import { Badge } from "./ui/badge";
 
 const PasswordResultModal = ({
   visibleModal,
@@ -8,8 +11,11 @@ const PasswordResultModal = ({
   passwordName,
   setPasswordName,
   savePassword,
+  getTags,
 }) => {
   const [isCopied, setIsCopied] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const copyButton = () => {
     if (!generatedPassword) return; // Eğer şifre boşsa, kopyalama işlemi yapma
 
@@ -18,8 +24,8 @@ const PasswordResultModal = ({
       .then(() => {
         toast.success("Password copied to clipboard.", {
           style: {
-            background: '#34c75a',
-            color: '#fff',
+            background: "#34c75a",
+            color: "#fff",
           },
         });
         setIsCopied(true);
@@ -32,8 +38,8 @@ const PasswordResultModal = ({
       .catch((error) => {
         toast.error("An error occurred while copying the password.", {
           style: {
-            background: '#000',
-            color: '#fff',
+            background: "#000",
+            color: "#fff",
           },
         });
       });
@@ -133,48 +139,97 @@ const PasswordResultModal = ({
             </button>
           </div>
         </div>
-        <div
-  id="save-area"
-  className="flex flex-col md:flex-row gap-4 items-center max-w-full"
->
-  <div className="relative flex items-center w-full md:w-auto lg:max-w-full overflow-hidden">
-    <input
-      type="text"
-      id="passwordNameInput"
-      value={passwordName}
-      onChange={(e) => setPasswordName(e.target.value)}
-      className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out dark:bg-black dark:border-gray-500 dark:text-white"
-      placeholder="Password name"
-      style={{
-        width: passwordName.length > 0 ? `${Math.max(8, passwordName.length)}ch` : "auto",
-      }}
-    />
-  </div>
-  <button
-    id="saved-button"
-    onClick={() => savePassword()}
-    type="submit"
-    className="w-full md:w-36 text-sm font-semibold bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white p-2 rounded-md text-center flex items-center justify-center"
-  >
-    <span id="button-text">Save</span>
-    <svg
-      id="check-icon"
-      className="w-5 h-5 text-white mx-auto hidden"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M5 13l4 4L19 7"
-      />
-    </svg>
-  </button>
-</div>
+        <div className="flex gap-2 flex-wrap mb-4">
+        {selectedTags.length > 0 ? (
+  selectedTags.map((id) => {
+    const tag = tags.find((t) => t.id === id);
+    return (
+      <Badge
+        key={id}
+        variant="secondary"
+        className="py-1.5 hover:bg-gray-200 cursor-pointer"
+        onClick={() => {
+          setSelectedTags((prev) => prev.filter((tagId) => tagId !== id));
+        }}
+      >
+        {tag?.name}
+      </Badge>
+    );
+  })
+) : (
+  <div className="hidden"></div>
+)}
 
+        </div>
+        <div className="relative flex flex-col  gap-4 w-full md:w-auto lg:max-w-full overflow-hidden">
+        <div className="flex items-center gap-2">
+          <div className="flex">
+            <TagsListCombobox
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              tags={tags}
+              setTags={setTags}
+            />
+            <TagsListModal />
+          </div>
+          <input
+            type="text"
+            id="passwordNameInput"
+            value={passwordName}
+            onChange={(e) => setPasswordName(e.target.value)}
+            className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out dark:bg-black dark:border-gray-500 dark:text-white"
+            placeholder="Password name"
+            style={{
+              width:
+                passwordName.length > 0
+                  ? `${Math.max(8, passwordName.length)}ch`
+                  : "auto",
+            }}
+          />
+        </div>
+          <div className="flex items-center gap-2">
+          <input
+            type="text"
+            id="passwordNameInput"
+            value={passwordName}
+            onChange={(e) => setPasswordName(e.target.value)}
+            className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out dark:bg-black dark:border-gray-500 dark:text-white"
+            placeholder="Password name"
+            style={{
+              width:
+                passwordName.length > 0
+                  ? `${Math.max(8, passwordName.length)}ch`
+                  : "auto",
+            }}
+          />
+          <button
+            id="saved-button"
+            onClick={() => {
+              savePassword();
+              getTags();
+            }}
+            type="submit"
+            className="w-full md:w-36 text-sm font-semibold bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white p-2 rounded-md text-center flex items-center justify-center"
+          >
+            <span id="button-text">Save</span>
+            <svg
+              id="check-icon"
+              className="w-5 h-5 text-white mx-auto hidden"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </button>
+          </div>
+        </div>
       </div>
       {/*Skeleton*/}
       <div
