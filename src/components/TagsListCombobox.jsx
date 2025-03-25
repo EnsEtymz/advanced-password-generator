@@ -48,16 +48,16 @@ export function TagsListCombobox({selectedTags, setSelectedTags,tags, setTags}) 
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <Popover>
         <PopoverTrigger asChild>
           <Button  className={cn(
-                        "w-36 justify-between text-muted-foreground shadow-none bg-white hover:bg-gray-200 border-l border-t border-b border-gray-500 rounded-r-none"
+                        "w-full justify-between text-muted-foreground shadow-none bg-white hover:bg-gray-200 border-l border-t border-b border-gray-500 rounded-r-none"
                       )} onClick={getTags}>
             Select tags
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0 ml-12">
+        <PopoverContent className="w-72 p-0">
           <div className="p-2">
             {tags.length === 0 ? (
               <p className="text-gray-500 text-sm">No tags found.</p>

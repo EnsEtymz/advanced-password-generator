@@ -66,6 +66,9 @@ export default function Home() {
     process.env.NEXT_PUBLIC_API_URL ?? "https://devtools-api.beratcarsi.com";
   const [isOpen, setIsOpen] = useState(false);
   const [passwordName, setPasswordName] = useState("");
+  const [hint, setHint] = useState("");
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
   const setState = useExpireStore((state) => state.setState);
   const setLoginModalState = useLoginModalStore((state) => state.setLoginModalState);
 
@@ -276,8 +279,8 @@ export default function Home() {
     const requestData = {
       name: passwordName,
       password: generatedPassword,
-      hint: "Hint test",
-      tag_ids: null,
+      hint: hint,
+      tag_ids: selectedTags,
     };
 
     try {
@@ -519,6 +522,12 @@ export default function Home() {
         passwordName={passwordName}
         setPasswordName={setPasswordName}
         savePassword={savePassword}
+        hint={hint}
+        setHint={setHint}
+        tags={tags}
+        setTags={setTags}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
       />
     </Fragment>
   );

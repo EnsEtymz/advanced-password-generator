@@ -3,6 +3,9 @@ import { toast } from "sonner";
 import { TagsListModal } from "./TagsListModal";
 import { TagsListCombobox } from "./TagsListCombobox";
 import { Badge } from "./ui/badge";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 const PasswordResultModal = ({
   visibleModal,
@@ -11,11 +14,14 @@ const PasswordResultModal = ({
   passwordName,
   setPasswordName,
   savePassword,
-  getTags,
+  tags,
+  setTags,
+  selectedTags,
+  setSelectedTags,
+  hint,
+  setHint,
 }) => {
   const [isCopied, setIsCopied] = useState(false);
-  const [tags, setTags] = useState([]);
-  const [selectedTags, setSelectedTags] = useState([]);
   const copyButton = () => {
     if (!generatedPassword) return; // Eğer şifre boşsa, kopyalama işlemi yapma
 
@@ -140,94 +146,69 @@ const PasswordResultModal = ({
           </div>
         </div>
         <div className="flex gap-2 flex-wrap mb-4">
-        {selectedTags.length > 0 ? (
-  selectedTags.map((id) => {
-    const tag = tags.find((t) => t.id === id);
-    return (
-      <Badge
-        key={id}
-        variant="secondary"
-        className="py-1.5 hover:bg-gray-200 cursor-pointer"
-        onClick={() => {
-          setSelectedTags((prev) => prev.filter((tagId) => tagId !== id));
-        }}
-      >
-        {tag?.name}
-      </Badge>
-    );
-  })
-) : (
-  <div className="hidden"></div>
-)}
-
+          {selectedTags.length > 0 ? (
+            selectedTags.map((id) => {
+              const tag = tags.find((t) => t.id === id);
+              return (
+                <Badge
+                  key={id}
+                  variant="secondary"
+                  className="py-1.5 hover:bg-gray-200 cursor-pointer"
+                  onClick={() => {
+                    setSelectedTags((prev) =>
+                      prev.filter((tagId) => tagId !== id)
+                    );
+                  }}
+                >
+                  {tag?.name}
+                </Badge>
+              );
+            })
+          ) : (
+            <div className="hidden"></div>
+          )}
         </div>
         <div className="relative flex flex-col  gap-4 w-full md:w-auto lg:max-w-full overflow-hidden">
-        <div className="flex items-center gap-2">
-          <div className="flex">
-            <TagsListCombobox
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              tags={tags}
-              setTags={setTags}
-            />
-            <TagsListModal />
-          </div>
-          <input
-            type="text"
-            id="passwordNameInput"
-            value={passwordName}
-            onChange={(e) => setPasswordName(e.target.value)}
-            className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out dark:bg-black dark:border-gray-500 dark:text-white"
-            placeholder="Password name"
-            style={{
-              width:
-                passwordName.length > 0
-                  ? `${Math.max(8, passwordName.length)}ch`
-                  : "auto",
-            }}
-          />
-        </div>
-          <div className="flex items-center gap-2">
-          <input
-            type="text"
-            id="passwordNameInput"
-            value={passwordName}
-            onChange={(e) => setPasswordName(e.target.value)}
-            className="border border-gray-500 text-black placeholder-gray-500 text-sm rounded-md focus:ring-gray-500 focus:border-gray-500 p-2 w-auto min-w-full md:min-w-44 max-w-4/5 transition-all duration-200 ease-in-out dark:bg-black dark:border-gray-500 dark:text-white"
-            placeholder="Password name"
-            style={{
-              width:
-                passwordName.length > 0
-                  ? `${Math.max(8, passwordName.length)}ch`
-                  : "auto",
-            }}
-          />
-          <button
-            id="saved-button"
-            onClick={() => {
-              savePassword();
-              getTags();
-            }}
-            type="submit"
-            className="w-full md:w-36 text-sm font-semibold bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white p-2 rounded-md text-center flex items-center justify-center"
-          >
-            <span id="button-text">Save</span>
-            <svg
-              id="check-icon"
-              className="w-5 h-5 text-white mx-auto hidden"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </button>
+          <div className="grid gap-4 p-0.5">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="current_password">Password Name</Label>
+                <Input
+                  id="passwordNameInput"
+                  type="text"
+                  value={passwordName}
+                  onChange={(e) => setPasswordName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="hint">Hint</Label>
+                <Input id="hint" type="text" value={hint} onChange={(e)=>{setHint(e.target.value)}} />
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="current_password">Tags</Label>
+                <div className="flex w-full">
+                  <TagsListCombobox
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                    tags={tags}
+                    setTags={setTags}
+                  />
+                  <TagsListModal />
+                </div>
+              </div>
+              <div className="flex flex-col justify-end">
+                <Label htmlFor="button">&nbsp;</Label> {/* Yükseklik sağlar */}
+                <Button
+                  type="submit"
+                  onClick={savePassword}
+                  className=" dark:text-black bg-[#34c75a] hover:bg-[#2aa24a] transition duration-200 text-white p-2 mt-2"
+                >
+                  Save
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
